@@ -15,7 +15,7 @@ def run():
     you_died = pygame.image.load('images/you_died.jpg')
 
     pygame.display.set_icon(icon)
-    pygame.display.set_caption('Space Fighter:Alien Attack')
+    pygame.display.set_caption('Space Fighter: Alien Attack')
     screen = pygame.display.set_mode((1280, 720))
 
     spaceship = SpaceShip(screen)

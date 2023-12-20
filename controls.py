@@ -33,7 +33,7 @@ def update(background_image, screen, stats, scs, spaceship, ufos, rockets, lives
         rocket.output()
     live_width = lives.rect.width
     for live_number in range(stats.lives):
-        lives.x = 10 + (live_width * live_number * 1.3)
+        lives.x = 10 + (live_width * live_number * 1.3)  # расположение жизней на экране
         lives.y = 10
         lives.rect.x = lives.x
         lives.rect.y = lives.y
@@ -81,7 +81,7 @@ def create_ufos_army(screen, ufos, speed=0):
     counts_ufo_x = int((1280 / ufo_width))
     ufo_height = ufo.rect.height
     counts_ufo_y = int((720 - 100 - 2 * ufo_height) / ufo_height)
-    for row_number in range(counts_ufo_y - 1):
+    for row_number in range(counts_ufo_y - 2):
         counts_empty_places = (randint(0, counts_ufo_x - 1))  #
         empty_position = [choice(range(counts_ufo_x)) for _ in range(counts_ufo_x - counts_empty_places)]
         # случайный выбор количества пришельцев в одном ряду (для красоты)
