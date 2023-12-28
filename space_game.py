@@ -8,6 +8,7 @@ from live import Lives
 
 def run():
     pygame.init()
+    FPS = 60
 
     icon = pygame.image.load('images/icon.png')
     background_image = pygame.image.load('images/space.png')
@@ -17,6 +18,8 @@ def run():
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Space Fighter: Alien Attack')
     screen = pygame.display.set_mode((1280, 720))
+
+    clock = pygame.time.Clock()
 
     spaceship = SpaceShip(screen)
     rockets = Group()
@@ -33,6 +36,7 @@ def run():
             controls.update_rockets(stats, scs, ufos, rockets)
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died)
             controls.update(background_image, screen, stats, scs, spaceship, ufos, rockets, lives)
+            clock.tick(FPS)
 
 
 run()
