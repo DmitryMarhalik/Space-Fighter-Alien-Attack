@@ -84,7 +84,7 @@ def create_ufos_army(screen, ufos, speed=0):
     for row_number in range(counts_ufo_y - 2):
         counts_empty_places = (randint(0, counts_ufo_x - 1))  #
         empty_position = [choice(range(counts_ufo_x)) for _ in range(counts_ufo_x - counts_empty_places)]
-        # случайный выбор количества пришельцев в одном ряду (для красоты)
+        # случайный выбор количества пришельцев в одном ряду (для разнообразия картинки)
         for ufo_number in range(counts_ufo_x):
             ufo = Ufo(screen)
             ufo.speed += speed
@@ -110,7 +110,7 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
         create_ufos_army(screen, ufos, speed=speed)
         spaceship.create_spaceship()
     else:
-        screen.blit(you_died, (160, 0))
+        screen.blit(you_died, (160, 0))  # прорисовка экрана смерти на главном экране
         pygame.display.flip()
         time.sleep(5)
         stats.play_game = False

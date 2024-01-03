@@ -8,7 +8,9 @@ from live import Lives
 
 def run():
     pygame.init()
-    FPS = 60
+    FPS = 60  # количество кадров в секунду
+    WIDTH = 1280
+    HEIGHT = 720
 
     icon = pygame.image.load('images/icon.png')
     background_image = pygame.image.load('images/space.png')
@@ -17,7 +19,7 @@ def run():
 
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Space Fighter: Alien Attack')
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
     clock = pygame.time.Clock()
 
