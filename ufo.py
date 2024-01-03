@@ -5,7 +5,7 @@ class Ufo(pygame.sprite.Sprite):
     """класс одного пришельца"""
     def __init__(self, screen):
         """инициализируем и задаем начальную позицию"""
-        super(Ufo, self).__init__()
+        pygame.sprite.Sprite.__init__(self)
         self.screen = screen
         self.image = pygame.image.load('images/ufo.png')
         self.rect = self.image.get_rect()

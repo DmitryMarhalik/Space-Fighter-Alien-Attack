@@ -1,18 +1,16 @@
 import pygame
-from pygame.sprite import Sprite
 
 
-class SpaceShip(Sprite):
+class SpaceShip(pygame.sprite.Sprite):
     def __init__(self, screen):
         """инициализация космического корабля"""
-        super(SpaceShip, self).__init__()
+        pygame.sprite.Sprite.__init__(self)
         self.screen = screen
         self.screen_rectangle = screen.get_rect()
         self.image = pygame.image.load('images/spaceship.png')
         self.rect = self.image.get_rect()
-        self.rect.centerx = self.screen_rectangle.centerx
-        self.center = float(self.rect.centerx)
-        self.rect.centery = 675
+        self.center = self.screen_rectangle.centerx  # положение внизу по оси X
+        self.rect.bottom = self.screen_rectangle.bottom  # положение внизу по оси Y
         self.move_right = False
         self.move_left = False
 

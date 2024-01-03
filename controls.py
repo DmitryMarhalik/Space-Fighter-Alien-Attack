@@ -29,8 +29,9 @@ def update(background_image, screen, stats, scs, spaceship, ufos, rockets, lives
     """обновление экрана"""
     screen.blit(background_image, (0, 0))
     scs.show_score()
-    for rocket in rockets.sprites():
-        rocket.output()
+    rockets.draw(screen)
+    # for rocket in rockets.sprites():
+    #     rocket.output()
     live_width = lives.rect.width
     for live_number in range(stats.lives):
         lives.x = 10 + (live_width * live_number * 1.3)  # расположение жизней на экране
@@ -40,18 +41,19 @@ def update(background_image, screen, stats, scs, spaceship, ufos, rockets, lives
         lives.output()
     ufos.draw(screen)
     spaceship.output()
-    pygame.display.flip()
+    pygame.display.update()
 
 
-def update_rockets(stats, scs, ufos, rockets):
+def update_rockets(stats, scs, ufos, rockets, hit):
     """обновление позиции ракет"""
     rockets.update()
     for rocket in rockets:  # ...in rockets.copy()
         if rocket.rect.bottom <= 0:
-            rockets.remove(rocket)
+            rocket.kill()  # rockets.remove(rocket)
     collisions = pygame.sprite.groupcollide(rockets, ufos, True, True)
     if collisions:
         for ufos in collisions.values():
+            hit.play()
             stats.score += 1 * len(ufos)
         scs.image_score()
         check_high_score(stats, scs)
@@ -60,31 +62,37 @@ def update_rockets(stats, scs, ufos, rockets):
 count_clear_level = 0
 
 
-def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died):
+def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, level):
     """обновляет позицию пришельцев"""
     ufos.update()
     global count_clear_level
     if len(ufos) == 0:
+        ufos.empty()
+        rockets.empty()
+        pygame.mixer.music.pause()
+        time.sleep(1)
+        level.play()
         count_clear_level += 0.05  # повышение скорости нового уровня при успешном прохождении предыдущего
         speed = count_clear_level
-        rockets.empty()
+        time.sleep(3)
         create_ufos_army(screen, ufos, speed=speed)
 
     speed = count_clear_level
-    ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died)
+    ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush)
 
 
 def create_ufos_army(screen, ufos, speed=0):
     """создание армии космических кораблей пришельцев"""
+    pygame.mixer_music.unpause()
     ufo = Ufo(screen)
     ufo_width = ufo.rect.width
     counts_ufo_x = int((1280 / ufo_width))
     ufo_height = ufo.rect.height
     counts_ufo_y = int((720 - 100 - 2 * ufo_height) / ufo_height)
     for row_number in range(counts_ufo_y - 2):
-        counts_empty_places = (randint(0, counts_ufo_x - 1))  #
-        empty_position = [choice(range(counts_ufo_x)) for _ in range(counts_ufo_x - counts_empty_places)]
+        counts_empty_places = (randint(0, counts_ufo_x - 1))
         # случайный выбор количества пришельцев в одном ряду (для разнообразия картинки)
+        empty_position = [choice(range(counts_ufo_x)) for _ in range(counts_ufo_x - counts_empty_places)]
         for ufo_number in range(counts_ufo_x):
             ufo = Ufo(screen)
             ufo.speed += speed
@@ -98,10 +106,12 @@ def create_ufos_army(screen, ufos, speed=0):
             ufos.add(ufo)
 
 
-def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died):
+def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush):
     """изменения при столкновение космического корабля и пришельца"""
     stats.lives -= 1
     if stats.lives > 0:
+        crush.play()
+        time.sleep(4)
         screen.blit(level_failed, (0, 0))
         pygame.display.flip()
         time.sleep(5)
@@ -117,11 +127,11 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
         sys.exit()
 
 
-def ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died):
+def ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush):
     """проверка, дошли ли пришельцы до линии космического корабля"""
     for ufo in ufos.sprites():
         if ufo.rect.bottom == spaceship.rect.top:
-            spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died)
+            spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush)
             break
 
 

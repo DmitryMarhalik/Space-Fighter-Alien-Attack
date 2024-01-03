@@ -4,7 +4,7 @@ import pygame
 class Rocket(pygame.sprite.Sprite):
     def __init__(self, screen, spaceship):
         """создание ракеты"""
-        super(Rocket, self).__init__()
+        pygame.sprite.Sprite.__init__(self)  # super(Rocket, self).__init__()
         self.screen = screen
         self.image = pygame.image.load('images/rocket.png')
         self.rect = self.image.get_rect()
@@ -12,7 +12,7 @@ class Rocket(pygame.sprite.Sprite):
         self.rect.centerx = spaceship.rect.centerx
         self.rect.centery = spaceship.rect.top
         self.y = float(self.rect.y)
-        self.press=False
+        self.press = False
 
     def update(self):
         """перемещение ракеты вверх"""
