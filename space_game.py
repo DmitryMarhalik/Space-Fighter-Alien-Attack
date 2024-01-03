@@ -16,10 +16,10 @@ def run():
     pygame.mixer.music.play(-1, 27.0, 4000)
     pygame.mixer.music.set_volume(0.3)
 
-    hit = pygame.mixer.Sound('sounds/zvuk2.ogg')
+    hit = pygame.mixer.Sound('sounds/bang.ogg')
     hit.set_volume(0.4)
     crush = pygame.mixer.Sound('sounds/crush_spaceship.ogg')
-    crush.set_volume(0.7)
+    crush.set_volume(0.5)
     level=pygame.mixer.Sound('sounds/level.ogg')
     level.set_volume(0.5)
 

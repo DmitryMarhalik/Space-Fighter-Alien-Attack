@@ -110,11 +110,14 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
     """изменения при столкновение космического корабля и пришельца"""
     stats.lives -= 1
     if stats.lives > 0:
+        pygame.mixer_music.pause()
+        time.sleep(1)
         crush.play()
         time.sleep(4)
         screen.blit(level_failed, (0, 0))
-        pygame.display.flip()
-        time.sleep(5)
+        pygame.display.update()
+        time.sleep(4)
+        pygame.mixer_music.unpause()
         ufos.empty()
         rockets.empty()
         create_ufos_army(screen, ufos, speed=speed)
