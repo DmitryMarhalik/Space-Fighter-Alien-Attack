@@ -4,8 +4,10 @@ from random import choice, randint
 from rocket import Rocket
 from ufo import Ufo
 
+count_clear_level = 0
 
-def events(screen, spaceship, rockets):
+
+def events(screen, spaceship, rockets, shoot):
     """обработка нажатий клавиш"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -16,6 +18,7 @@ def events(screen, spaceship, rockets):
             elif event.key == pygame.K_LEFT:
                 spaceship.move_left = True
             elif event.key == pygame.K_SPACE:
+                shoot.play()
                 new_rocket = Rocket(screen, spaceship)
                 rockets.add(new_rocket)
         elif event.type == pygame.KEYUP:
@@ -28,8 +31,6 @@ def events(screen, spaceship, rockets):
 def update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives):
     """обновление экрана"""
     screen.blit(bg_image, (0, 0))
-    scs.show_score()
-    rockets.draw(screen)
     live_width = lives.rect.width
     for live_number in range(stats.lives):
         lives.x = 10 + (live_width * live_number * 1.3)  # расположение жизней на экране
@@ -37,6 +38,8 @@ def update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives):
         lives.rect.x = lives.x
         lives.rect.y = lives.y
         lives.output()
+    scs.show_score()
+    rockets.draw(screen)
     ufos.draw(screen)
     spaceship.output()
     pygame.display.update()
@@ -59,10 +62,8 @@ def update_rockets(stats, scs, ufos, rockets, hit):
         check_high_score(stats, scs)
 
 
-count_clear_level = 0
-
-
-def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level, msg_next_level):
+def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level, msg_next_level,
+                game_over, bg_image):
     """обновляет позицию пришельцев"""
     ufos.update()
     global count_clear_level
@@ -77,7 +78,7 @@ def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died,
         time.sleep(3)
         create_ufos_army(screen, ufos, speed=speed)
     speed = count_clear_level
-    ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush)
+    ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over, bg_image)
 
 
 def create_ufos_army(screen, ufos, speed=0):
@@ -105,12 +106,11 @@ def create_ufos_army(screen, ufos, speed=0):
             ufos.add(ufo)
 
 
-def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush):
+def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over, bg_image):
     """изменения при столкновение космического корабля и пришельца"""
     stats.lives -= 1
     if stats.lives > 0:
         pygame.mixer_music.pause()
-        time.sleep(1)
         crush.play()
         time.sleep(4)
         screen.blit(level_failed, (0, 0))
@@ -122,18 +122,23 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
         create_ufos_army(screen, ufos, speed=speed)
         spaceship.create_spaceship()
     else:
-        screen.blit(you_died, (160, 0))  # прорисовка экрана смерти на главном экране
-        pygame.display.flip()
-        time.sleep(5)
+        screen.blit(bg_image, (0, 0))
+        screen.blit(you_died, (160, 0))  # прорисовка экрана смерти на главном экране на фоне bg_image
+        pygame.display.update()
+        pygame.mixer_music.stop()
+        game_over.play()
+        time.sleep(6)
         stats.play_game = False
         sys.exit()
 
 
-def ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush):
+def ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over,
+                     bg_image):
     """проверка, дошли ли пришельцы до линии космического корабля"""
     for ufo in ufos.sprites():
         if ufo.rect.bottom == spaceship.rect.top:
-            spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush)
+            spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over,
+                           bg_image)
             break
 
 

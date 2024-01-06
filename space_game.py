@@ -17,12 +17,16 @@ def run():
     pygame.mixer.music.load('sounds/bg_music.mp3')
     pygame.mixer.music.play(-1, 27.0, 4000)
     pygame.mixer.music.set_volume(0.2)
+    shoot=pygame.mixer.Sound('sounds/shoot.mp3')
+    shoot.set_volume(0.4)
     hit = pygame.mixer.Sound('sounds/bang.ogg')
     hit.set_volume(0.4)
     crush = pygame.mixer.Sound('sounds/crush_spaceship.ogg')
     crush.set_volume(0.4)
     next_level = pygame.mixer.Sound('sounds/level.ogg')
     next_level.set_volume(0.5)
+    game_over = pygame.mixer.Sound('sounds/game_over.mp3')
+    game_over.set_volume(0.5)
 
     icon = pygame.image.load('images/icon.png')
     bg_image = pygame.image.load('images/space.png')
@@ -45,11 +49,11 @@ def run():
     msg_next_level = NextLevel(screen)
 
     while True:
-        controls.events(screen, spaceship, rockets)
+        controls.events(screen, spaceship, rockets, shoot)
         if stats.play_game:
             spaceship.update_position()
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level,
-                                 msg_next_level)
+                                 msg_next_level, game_over, bg_image)
             controls.update_rockets(stats, scs, ufos, rockets, hit)
             controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives)
             clock.tick(FPS)
