@@ -39,7 +39,7 @@ def run():
 
     # Установка свойств окна игры
     pygame.display.set_icon(icon)
-    pygame.display.set_caption('Space Fighter: Alien Attack')
+    pygame.display.set_caption('Space Fighter: Aliens Attack')
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
 
