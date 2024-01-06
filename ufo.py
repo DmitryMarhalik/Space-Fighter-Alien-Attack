@@ -10,7 +10,7 @@ class Ufo(pygame.sprite.Sprite):
         self.screen = screen
         self.image = pygame.image.load('images/ufo.png')
         self.rect = self.image.get_rect()
-        self.speed = 0.9
+        self.speed = 0.1
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
         self.x = float(self.rect.x)

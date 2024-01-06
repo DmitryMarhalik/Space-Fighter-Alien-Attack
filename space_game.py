@@ -25,11 +25,11 @@ def run():
     pygame.mixer.music.set_volume(0.2)
 
     # Загрузка и настройка звуковых эффектов
-    shoot = config_sound('sounds/shoot.mp3', 0.4)
-    hit = config_sound('sounds/bang.ogg', 0.4)
-    crush = config_sound('sounds/crush_spaceship.ogg', 0.4)
-    next_level = config_sound('sounds/level.ogg', 0.4)
-    game_over = config_sound('sounds/game_over.mp3', 0.4)
+    shoot = config_sound('sounds/shoot.mp3')
+    hit = config_sound('sounds/bang.ogg')
+    crush = config_sound('sounds/crush_spaceship.ogg')
+    next_level = config_sound('sounds/level.ogg')
+    game_over = config_sound('sounds/game_over.mp3')
 
     # Загрузка изображений
     icon = pygame.image.load('images/icon.png')
@@ -41,7 +41,6 @@ def run():
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Space Fighter: Alien Attack')
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
     clock = pygame.time.Clock()
 
     # Создание игровых объектов
@@ -57,19 +56,17 @@ def run():
     while True:
         # Обработка событий
         controls.events(screen, spaceship, rockets, shoot)
-
         if stats.play_game:
             # Обновление положение космического корабля
             spaceship.update_position()
-
             # Обновление пришельцев
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level,
                                  msg_next_level, game_over, bg_image)
-
             # Обновление ракет и очков
             controls.update_rockets(stats, scs, ufos, rockets, hit)
-
             # Обновление экрана
             controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives)
-
             clock.tick(FPS)
+
+
+run()
