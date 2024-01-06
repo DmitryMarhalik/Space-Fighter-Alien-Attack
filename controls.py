@@ -25,13 +25,11 @@ def events(screen, spaceship, rockets):
                 spaceship.move_left = False
 
 
-def update(background_image, screen, stats, scs, spaceship, ufos, rockets, lives):
+def update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives):
     """обновление экрана"""
-    screen.blit(background_image, (0, 0))
+    screen.blit(bg_image, (0, 0))
     scs.show_score()
     rockets.draw(screen)
-    # for rocket in rockets.sprites():
-    #     rocket.output()
     live_width = lives.rect.width
     for live_number in range(stats.lives):
         lives.x = 10 + (live_width * live_number * 1.3)  # расположение жизней на экране
@@ -51,6 +49,8 @@ def update_rockets(stats, scs, ufos, rockets, hit):
         if rocket.rect.bottom <= 0:
             rocket.kill()  # rockets.remove(rocket)
     collisions = pygame.sprite.groupcollide(rockets, ufos, True, True)
+    if len(ufos) == 0:
+        rockets.empty()  # удаление с экрана оставшихся ракет успешном поражении всех пришельцев
     if collisions:
         for ufos in collisions.values():
             hit.play()
@@ -62,21 +62,20 @@ def update_rockets(stats, scs, ufos, rockets, hit):
 count_clear_level = 0
 
 
-def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, level):
+def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level, msg_next_level):
     """обновляет позицию пришельцев"""
     ufos.update()
     global count_clear_level
     if len(ufos) == 0:
-        ufos.empty()
-        rockets.empty()
         pygame.mixer.music.pause()
+        msg_next_level.show_message()
+        pygame.display.update()
         time.sleep(1)
-        level.play()
+        next_level.play()
         count_clear_level += 0.05  # повышение скорости нового уровня при успешном прохождении предыдущего
         speed = count_clear_level
         time.sleep(3)
         create_ufos_army(screen, ufos, speed=speed)
-
     speed = count_clear_level
     ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush)
 
