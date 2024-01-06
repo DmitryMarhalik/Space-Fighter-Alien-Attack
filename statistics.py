@@ -1,5 +1,6 @@
 class Statistics():
     """отслеживание статистики"""
+
     def __init__(self):
         """инициализирует статистику"""
         self.reset_stats()
@@ -11,4 +12,3 @@ class Statistics():
         """статистика, изменяющаяся во время игры"""
         self.lives = 3
         self.score = 0
-

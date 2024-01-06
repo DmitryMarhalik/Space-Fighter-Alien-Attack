@@ -5,10 +5,13 @@ from rocket import Rocket
 from ufo import Ufo
 
 count_clear_level = 0
+music_volume = 0.2
+music_pause = False
 
 
 def events(screen, spaceship, rockets, shoot):
     """обработка нажатий клавиш"""
+    global music_pause, music_volume
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -21,6 +24,18 @@ def events(screen, spaceship, rockets, shoot):
                 shoot.play()
                 new_rocket = Rocket(screen, spaceship)
                 rockets.add(new_rocket)
+            elif event.key == pygame.K_PAUSE:
+                music_pause = not music_pause
+                if music_pause:
+                    pygame.mixer.music.pause()
+                else:
+                    pygame.mixer.music.unpause()
+            elif event.key == pygame.K_KP_PLUS:
+                music_volume += 0.1
+                pygame.mixer_music.set_volume(music_volume)
+            elif event.key == pygame.K_KP_MINUS:
+                music_volume -= 0.1
+                pygame.mixer_music.set_volume(music_volume)
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 spaceship.move_right = False
@@ -111,6 +126,7 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
     stats.lives -= 1
     if stats.lives > 0:
         pygame.mixer_music.pause()
+        time.sleep(1)
         crush.play()
         time.sleep(4)
         screen.blit(level_failed, (0, 0))

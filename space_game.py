@@ -4,29 +4,25 @@ from pygame.sprite import Group
 from statistics import Statistics
 from text_images import Scores, NextLevel
 from live import Lives
+from set_sound import config_sound
+
+WIDTH = 1280
+HEIGHT = 720
+FPS = 60  # количество кадров в секунду
 
 
 def run():
     pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()
-    FPS = 60  # количество кадров в секунду
-    WIDTH = 1280
-    HEIGHT = 720
-
     # добавление звуков
     pygame.mixer.music.load('sounds/bg_music.mp3')
     pygame.mixer.music.play(-1, 27.0, 4000)
     pygame.mixer.music.set_volume(0.2)
-    shoot=pygame.mixer.Sound('sounds/shoot.mp3')
-    shoot.set_volume(0.4)
-    hit = pygame.mixer.Sound('sounds/bang.ogg')
-    hit.set_volume(0.4)
-    crush = pygame.mixer.Sound('sounds/crush_spaceship.ogg')
-    crush.set_volume(0.4)
-    next_level = pygame.mixer.Sound('sounds/level.ogg')
-    next_level.set_volume(0.5)
-    game_over = pygame.mixer.Sound('sounds/game_over.mp3')
-    game_over.set_volume(0.5)
+    shoot = config_sound('sounds/shoot.mp3', 0.4)
+    hit = config_sound('sounds/bang.ogg', 0.4)
+    crush = config_sound('sounds/crush_spaceship.ogg', 0.4)
+    next_level = config_sound('sounds/level.ogg', 0.4)
+    game_over = config_sound('sounds/game_over.mp3', 0.4)
 
     icon = pygame.image.load('images/icon.png')
     bg_image = pygame.image.load('images/space.png')
@@ -43,10 +39,10 @@ def run():
     rockets = Group()
     ufos = Group()
     lives = Lives(screen)
-    controls.create_ufos_army(screen, ufos)
     stats = Statistics()
     scs = Scores(screen, stats)
     msg_next_level = NextLevel(screen)
+    controls.create_ufos_army(screen, ufos)
 
     while True:
         controls.events(screen, spaceship, rockets, shoot)
