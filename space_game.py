@@ -62,7 +62,7 @@ def run():
             # Обновление положение космического корабля
             spaceship.update_position()
 
-            # Обновление НЛО и состояние игры.
+            # Обновление пришельцев
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level,
                                  msg_next_level, game_over, bg_image)
 
