@@ -25,7 +25,7 @@ def run():
     pygame.mixer.music.set_volume(0.2)
 
     # Загрузка и настройка звуковых эффектов
-    shoot = config_sound('sounds/shoot.mp3')
+    shoot = config_sound('sounds/shoot.mp3', volume=0.2)
     hit = config_sound('sounds/hit.mp3')
     crush = config_sound('sounds/crush_spaceship.mp3')
     next_level = config_sound('sounds/next_level.mp3')
