@@ -103,8 +103,8 @@ def create_ufos_army(screen, ufos, speed=0):
     ufo_width = ufo.rect.width
     counts_ufo_x = int((1280 / ufo_width))
     ufo_height = ufo.rect.height
-    counts_ufo_y = int((720 - 100 - 2 * ufo_height) / ufo_height)
-    for row_number in range(counts_ufo_y - 2):
+    counts_ufo_y = int(720 / ufo_height)
+    for row_number in range(counts_ufo_y - 5):
         counts_empty_places = (randint(0, counts_ufo_x - 1))
         # случайный выбор количества пришельцев в одном ряду (для разнообразия картинки)
         empty_position = [choice(range(counts_ufo_x)) for _ in range(counts_ufo_x - counts_empty_places)]
