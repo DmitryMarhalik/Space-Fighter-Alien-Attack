@@ -20,7 +20,7 @@ def run():
     pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()
     pygame.time.set_timer(pygame.USEREVENT, 3000)
-    pygame.time.set_timer(pygame.USEREVENT + 1, 10000)
+    pygame.time.set_timer(pygame.USEREVENT + 1, 3000)
 
     # Загрузка и воспроизведение фоновой музыки
     pygame.mixer.music.load('sounds/bg_music.mp3')

@@ -20,6 +20,7 @@ class Astronaut(pygame.sprite.Sprite):
 
 astronaut_imgs = (
     {'path': 'astronaut.png'},
+    {'path': 'help.png'},
 )
 
 astronaut_surface = [pygame.image.load('images/' + file['path']) for file in astronaut_imgs]

@@ -79,8 +79,6 @@ def update_objects_positions(stats, spaceship, scs, ufos, rockets, hit, astronau
             rocket.kill()  # rockets.remove(rocket)
     collisions = pygame.sprite.groupcollide(rockets, ufos, True, True)
     hit_balls = pygame.sprite.groupcollide(rockets, meteorites, True, True)
-    # safe_astronaut = pygame.sprite.spritecollide(spaceship, astronauts, False)
-    # print(safe_astronaut)
     if len(ufos) == 0:
         astronauts.empty()
         meteorites.empty()
