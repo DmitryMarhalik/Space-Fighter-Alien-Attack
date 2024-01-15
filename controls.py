@@ -1,6 +1,8 @@
 import time
 import pygame, sys
 from random import choice, randint
+
+from space_garbage import createBall, garbage_surface
 from rocket import Rocket
 from ufo import Ufo
 
@@ -9,12 +11,14 @@ music_volume = 0.2
 music_pause = False
 
 
-def events(screen, spaceship, rockets, shoot):
+def events(screen, spaceship, rockets, shoot, meteorites, WIDTH):
     """обработка нажатий клавиш"""
     global music_pause, music_volume
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+        elif event.type == pygame.USEREVENT:
+            createBall(meteorites, garbage_surface, WIDTH)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 spaceship.move_right = True
@@ -43,7 +47,7 @@ def events(screen, spaceship, rockets, shoot):
                 spaceship.move_left = False
 
 
-def update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives):
+def update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives, meteorites, HEIGHT):
     """обновление экрана"""
     screen.blit(bg_image, (0, 0))
     live_width = lives.rect.width
@@ -54,31 +58,34 @@ def update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives):
         lives.rect.y = lives.y
         lives.output()
     scs.show_score()
+    meteorites.draw(screen)
+    meteorites.update(HEIGHT)
     rockets.draw(screen)
     ufos.draw(screen)
     spaceship.output()
     pygame.display.update()
 
 
-def update_rockets(stats, scs, ufos, rockets, hit):
+def update_rockets(stats, scs, ufos, rockets, hit, meteorites):
     """обновление позиции ракет"""
     rockets.update()
     for rocket in rockets:  # ...in rockets.copy()
         if rocket.rect.bottom <= 0:
             rocket.kill()  # rockets.remove(rocket)
     collisions = pygame.sprite.groupcollide(rockets, ufos, True, True)
+    hit_balls = pygame.sprite.groupcollide(rockets, meteorites, True, True)
     if len(ufos) == 0:
+        meteorites.empty()
         rockets.empty()  # удаление с экрана оставшихся ракет успешном поражении всех пришельцев
-    if collisions:
-        for ufos in collisions.values():
-            hit.play()
-            stats.score += 1 * len(ufos)
+    if collisions or hit_balls:
+        hit.play()
+        stats.score += 1
         scs.image_score()
         check_high_score(stats, scs)
 
 
 def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level, msg_next_level,
-                game_over, bg_image):
+                game_over, bg_image, meteorites):
     """обновляет позицию пришельцев"""
     ufos.update()
     global count_clear_level
@@ -93,7 +100,8 @@ def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died,
         time.sleep(3)
         create_ufos_army(screen, ufos, speed=speed)
     speed = count_clear_level
-    ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over, bg_image)
+    ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over, bg_image,
+                     meteorites)
 
 
 def create_ufos_army(screen, ufos, speed=0):
@@ -121,7 +129,8 @@ def create_ufos_army(screen, ufos, speed=0):
             ufos.add(ufo)
 
 
-def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over, bg_image):
+def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over, bg_image,
+                   meteorites):
     """изменения при столкновение космического корабля и пришельца"""
     stats.lives -= 1
     if stats.lives > 0:
@@ -135,6 +144,7 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
         pygame.mixer_music.unpause()
         ufos.empty()
         rockets.empty()
+        meteorites.empty()
         create_ufos_army(screen, ufos, speed=speed)
         spaceship.create_spaceship()
     else:
@@ -149,13 +159,17 @@ def spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed,
 
 
 def ufos_bottom_line(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over,
-                     bg_image):
-    """проверка, дошли ли пришельцы до линии космического корабля"""
+                     bg_image, meteorites):
+    """проверка, дошли ли пришельцы до линии космического корабля или """
     for ufo in ufos.sprites():
         if ufo.rect.bottom == spaceship.rect.top:
             spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over,
-                           bg_image)
+                           bg_image, meteorites)
             break
+    collisions = pygame.sprite.spritecollideany(spaceship, meteorites)
+    if collisions:
+        spaceship_kill(stats, screen, spaceship, ufos, rockets, speed, level_failed, you_died, crush, game_over,
+                       bg_image, meteorites)
 
 
 def check_high_score(stats, scs):

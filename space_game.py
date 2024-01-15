@@ -1,4 +1,5 @@
 import pygame, controls
+
 from spaceship import SpaceShip
 from pygame.sprite import Group
 from statistics import Statistics
@@ -18,6 +19,7 @@ def run():
     # Инициализация pygame и mixer
     pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()
+    pygame.time.set_timer(pygame.USEREVENT, 3000)
 
     # Загрузка и воспроизведение фоновой музыки
     pygame.mixer.music.load('sounds/bg_music.mp3')
@@ -31,22 +33,24 @@ def run():
     next_level = config_sound('sounds/next_level.mp3')
     game_over = config_sound('sounds/game_over.mp3')
 
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
     # Загрузка изображений
-    icon = pygame.image.load('images/icon.png')
-    bg_image = pygame.image.load('images/space.png')
-    level_failed = pygame.image.load('images/level_failed.png')
-    you_died = pygame.image.load('images/you_died.jpg')
+    icon = pygame.image.load('images/icon.png').convert_alpha()
+    bg_image = pygame.image.load('images/space.png').convert_alpha()
+    level_failed = pygame.image.load('images/level_failed.png').convert_alpha()
+    you_died = pygame.image.load('images/you_died.jpg').convert_alpha()
 
     # Установка свойств окна игры
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Space Fighter: Aliens Attack')
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
 
     # Создание игровых объектов
     spaceship = SpaceShip(screen)
     rockets = Group()
     ufos = Group()
+    meteorites = Group()
     lives = Lives(screen)
     stats = Statistics()
     scs = Scores(screen, stats)
@@ -55,17 +59,17 @@ def run():
 
     while True:
         # Обработка событий
-        controls.events(screen, spaceship, rockets, shoot)
+        controls.events(screen, spaceship, rockets, shoot, meteorites, WIDTH)
         if stats.play_game:
             # Обновление положение космического корабля
             spaceship.update_position()
             # Обновление пришельцев
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level,
-                                 msg_next_level, game_over, bg_image)
+                                 msg_next_level, game_over, bg_image, meteorites)
             # Обновление ракет и очков
-            controls.update_rockets(stats, scs, ufos, rockets, hit)
+            controls.update_rockets(stats, scs, ufos, rockets, hit, meteorites)
             # Обновление экрана
-            controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives)
+            controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives, meteorites, HEIGHT)
             clock.tick(FPS)
 
 
