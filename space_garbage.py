@@ -19,15 +19,14 @@ garbage_imgs = ({'path': 'virus.png'},
                 {'path': 'bosch.png'},
                 {'path': 'meteorite.png'},
                 {'path': 'crystal-quartz.png'},
-                {'path': 'small-meteor.png'},
-                {'path': 'oscar.png'})
+                {'path': 'small-meteor.png'})
 
 garbage_surface = [pygame.image.load('images/' + file['path']) for file in garbage_imgs]
 
 
-def createBall(meteorites, garbage_surface, WIDTH):
+def create_meteorite(meteorites, garbage_surface, WIDTH):
     indx = randint(0, len(garbage_surface) - 1)
-    x_position = randint(20, WIDTH - 20)
+    x_position = randint(40, WIDTH - 40)
     speed_garbage = randint(1, 4)
     return Meteorit(x_position, speed_garbage, garbage_surface[indx], meteorites)
 

@@ -20,6 +20,7 @@ def run():
     pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()
     pygame.time.set_timer(pygame.USEREVENT, 3000)
+    pygame.time.set_timer(pygame.USEREVENT + 1, 10000)
 
     # Загрузка и воспроизведение фоновой музыки
     pygame.mixer.music.load('sounds/bg_music.mp3')
@@ -27,6 +28,8 @@ def run():
     pygame.mixer.music.set_volume(0.2)
 
     # Загрузка и настройка звуковых эффектов
+    miss_astronaut = config_sound('sounds/miss_astronaut.mp3')
+    safe = config_sound('sounds/yes.mp3')
     shoot = config_sound('sounds/shoot.mp3', volume=0.2)
     hit = config_sound('sounds/hit.mp3')
     crush = config_sound('sounds/crush_spaceship.mp3')
@@ -50,26 +53,28 @@ def run():
     spaceship = SpaceShip(screen)
     rockets = Group()
     ufos = Group()
+    astronauts = Group()
     meteorites = Group()
     lives = Lives(screen)
     stats = Statistics()
     scs = Scores(screen, stats)
     msg_next_level = NextLevel(screen)
-    controls.create_ufos_army(screen, ufos)
+    controls.create_ufos_army(screen, ufos, astronauts, meteorites)
 
     while True:
         # Обработка событий
-        controls.events(screen, spaceship, rockets, shoot, meteorites, WIDTH)
+        controls.events(screen, spaceship, rockets, shoot, meteorites, astronauts, WIDTH)
         if stats.play_game:
             # Обновление положение космического корабля
             spaceship.update_position()
             # Обновление пришельцев
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level,
-                                 msg_next_level, game_over, bg_image, meteorites)
+                                 msg_next_level, game_over, bg_image, astronauts, meteorites, miss_astronaut)
             # Обновление ракет и очков
-            controls.update_rockets(stats, scs, ufos, rockets, hit, meteorites)
+            controls.update_objects_positions(stats, spaceship, scs, ufos, rockets, hit, astronauts, meteorites, safe)
             # Обновление экрана
-            controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives, meteorites, HEIGHT)
+            controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives, astronauts, meteorites,
+                            HEIGHT)
             clock.tick(FPS)
 
 
