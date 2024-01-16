@@ -19,8 +19,8 @@ def run():
     # Инициализация pygame и mixer
     pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()
-    pygame.time.set_timer(pygame.USEREVENT, 3000)
-    pygame.time.set_timer(pygame.USEREVENT + 1, 3000)
+    pygame.time.set_timer(pygame.USEREVENT, 4000)
+    pygame.time.set_timer(pygame.USEREVENT + 1, 13000)
 
     # Загрузка и воспроизведение фоновой музыки
     pygame.mixer.music.load('sounds/bg_music.mp3')
@@ -59,7 +59,7 @@ def run():
     stats = Statistics()
     scs = Scores(screen, stats)
     msg_next_level = NextLevel(screen)
-    controls.create_ufos_army(screen, ufos, astronauts, meteorites)
+    controls.create_ufos_army(screen, ufos)
 
     while True:
         # Обработка событий
@@ -69,9 +69,10 @@ def run():
             spaceship.update_position()
             # Обновление пришельцев
             controls.update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died, crush, next_level,
-                                 msg_next_level, game_over, bg_image, astronauts, meteorites, miss_astronaut)
-            # Обновление ракет и очков
-            controls.update_objects_positions(stats, spaceship, scs, ufos, rockets, hit, astronauts, meteorites, safe)
+                                 msg_next_level, game_over, bg_image, astronauts, meteorites)
+            # Обновление позиции объектов
+            controls.update_objects_positions(stats, spaceship, scs, ufos, rockets, hit, astronauts, meteorites, safe,
+                                              miss_astronaut)
             # Обновление экрана
             controls.update(bg_image, screen, stats, scs, spaceship, ufos, rockets, lives, astronauts, meteorites,
                             HEIGHT)

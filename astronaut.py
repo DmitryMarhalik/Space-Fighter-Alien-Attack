@@ -19,7 +19,10 @@ class Astronaut(pygame.sprite.Sprite):
 
 
 astronaut_imgs = (
-    {'path': 'astronaut.png'},
+    # {'path': 'astr1.png'},
+    # {'path': 'astr2.png'},
+    {'path': 'astr3.png'},
+    {'path': 'astr4.png'},
     {'path': 'help.png'},
 )
 
