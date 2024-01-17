@@ -108,7 +108,7 @@ def update_ufos(stats, screen, spaceship, ufos, rockets, level_failed, you_died,
         pygame.display.update()
         time.sleep(1)
         next_level.play()
-        count_clear_level += 0.05  # повышение скорости нового уровня при успешном прохождении предыдущего
+        count_clear_level += 0.03  # повышение скорости нового уровня при успешном прохождении предыдущего
         speed = count_clear_level
         time.sleep(3)
         create_ufos_army(screen, ufos, speed=speed)

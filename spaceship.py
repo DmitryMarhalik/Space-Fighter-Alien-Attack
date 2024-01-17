@@ -21,9 +21,9 @@ class SpaceShip(pygame.sprite.Sprite):
     def update_position(self):
         """обновление позиции космического корабля"""
         if self.move_right and self.rect.right < self.screen_rectangle.right:
-            self.center += 5.5
+            self.center += 10.5
         elif self.move_left and self.rect.left > 0:  # self.screen_rectangle.left:
-            self.center -= 5.5
+            self.center -= 10.5
         self.rect.centerx = self.center
 
     def create_spaceship(self):
