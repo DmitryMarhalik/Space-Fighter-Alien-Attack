@@ -27,5 +27,5 @@ garbage_surface = [pygame.image.load('images/' + file['path']) for file in garba
 def create_meteorite(meteorites, garbage_surface, WIDTH):
     indx = randint(0, len(garbage_surface) - 1)
     x_position = randint(40, WIDTH - 40)
-    speed_garbage = randint(1, 5)
+    speed_garbage = randint(1, 6)
     return Meteorit(x_position, speed_garbage, garbage_surface[indx], meteorites)
