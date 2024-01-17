@@ -31,5 +31,5 @@ astronaut_surface = [pygame.image.load('images/' + file['path']) for file in ast
 def create_astronaut(astronauts, astronaut_surface, WIDTH):
     indx = randint(0, len(astronaut_surface) - 1)
     x_position = randint(20, WIDTH - 20)
-    speed_astronaut = randint(1, 3)
+    speed_astronaut = randint(1, 4)
     return Astronaut(x_position, speed_astronaut, astronaut_surface[indx], astronauts)
