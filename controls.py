@@ -88,7 +88,7 @@ def update_objects_positions(stats, spaceship, scs, ufos, rockets, hit, astronau
             safe.play()
             astronaut.kill()
             add_score(stats, scs, 5)
-        elif astronaut.rect.bottom == spaceship.rect.bottom:
+        elif astronaut.rect.bottom > spaceship.rect.bottom:
             miss_astronaut.play()
             astronaut.kill()
             add_score(stats, scs, -15)
